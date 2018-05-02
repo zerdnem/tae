@@ -4,10 +4,8 @@ Find hashed passwords online
 # Dependencies
 ```
 go get -u github.com/gocolly/colly/...
-```
-
-```
 go get github.com/fatih/color
+
 ```
 
 # Credits
