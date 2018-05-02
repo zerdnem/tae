@@ -14,4 +14,4 @@ go get github.com/fatih/color
 [dcipher - https://github.com/k4m4/dcipher ](https://github.com/k4m4/dcipher)
 
 # Screenshot
-![ss](https://raw.githubusercontent.com/zerdnem/tae/master/carbon.png)
+![ss](https://github.com/zerdnem/tae/blob/master/carbon.png)
