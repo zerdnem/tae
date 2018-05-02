@@ -5,7 +5,6 @@ Find hashed passwords online
 ```
 go get -u github.com/gocolly/colly/...
 go get github.com/fatih/color
-
 ```
 
 # Credits
