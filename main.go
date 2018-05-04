@@ -10,13 +10,17 @@ import (
 	"os"
 )
 
+var (
+	green         = color.New(color.FgGreen).SprintFunc()
+	red           = color.New(color.FgRed).SprintFunc()
+	successSymbol = green("✔")
+	errorSymbol   = red("✖")
+)
+
 func dcipherHash(hash, hashType string) (string, error) {
 	var temp string
 	temp, err := utils.RetrieveHash(hash, hashType)
-	if err != nil {
-		return temp, errors.New("Hash could not be deciphered")
-	}
-	if temp == "" {
+	if err != nil || temp == "" {
 		return temp, errors.New("Hash could not be deciphered")
 	}
 	return temp, nil
@@ -26,37 +30,34 @@ func dcipher(h string) (string, error) {
 	var response string
 	hash, err := utils.FromString(h)
 	if err != nil {
-		return response, errors.New("Hash type not supported")
+		return nil, err
 	}
 	hashType := string(hash.Algorithm)
 	hashValue := fmt.Sprintf("%x", hash.HashValue)
-	if hashType == "sha1" || hashType == "md5" || hashType == "sha256" {
-		response, err = dcipherHash(hashValue, hashType)
-		if err != nil {
-			return response, errors.New("Hash could not be deciphered")
-		}
-		return response, nil
-	} else {
-		return response, errors.New("Hash type not supported")
+
+	response, err = dcipherHash(hashValue, hashType)
+	if err != nil {
+		return nil, err
 	}
+	return response, nil
+}
+
+func displaySymbol(hash interface{}) {
+	s, _ := hash.(string)
+	result, err := dcipher(s)
+	if err != nil {
+		fmt.Printf("%s %s", errorSymbol, err)
+	}
+	fmt.Printf("%s %s", successSymbol, result)
 }
 
 func main() {
-	green := color.New(color.FgGreen).SprintFunc()
-	red := color.New(color.FgRed).SprintFunc()
-	successSymbol := green("✔")
-	errorSymbol := red("✖")
-
 	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			hash := scanner.Text()
-			result, err := dcipher(hash)
-			if err != nil {
-				fmt.Printf("%s %s", errorSymbol, err)
-			}
-			fmt.Printf("%s %s", successSymbol, result)
+			displaySymbol(hash)
 		}
 	} else {
 		hash := flag.String("hash", "", "Specify a hash to decipher (Required)")
@@ -65,10 +66,6 @@ func main() {
 			flag.PrintDefaults()
 			os.Exit(1)
 		}
-		result, err := dcipher(*hash)
-		if err != nil {
-			fmt.Printf("%s %s", errorSymbol, err)
-		}
-		fmt.Printf("%s %s", successSymbol, result)
+		displaySymbol(*hash)
 	}
 }

@@ -5,6 +5,10 @@ import (
 	"github.com/gocolly/colly"
 )
 
+var response string
+
+var c = colly.NewCollector()
+
 type hashInfo struct {
 	hashtype string
 	url      string
@@ -21,38 +25,32 @@ func (ha *hash) AddHash() []hashInfo {
 	return ha.hash
 }
 
+func scrapeWebsite(hashtype string) {
+	c.OnHTML("span", func(e *colly.HTMLElement) {
+		if e.Attr("title") == "decrypted "+hashtype+" hash" {
+			response = string(e.Text)
+		}
+	})
+}
+
 func RetrieveHash(newhash, hashType string) (string, error) {
-	var response string
-	c := colly.NewCollector()
 	h := hash{}
 	hashes := h.AddHash()
 	for _, hash := range hashes {
 		if hash.hashtype == hashType {
 			switch hash.hashtype {
 			case "md5":
-				c.OnHTML("span", func(e *colly.HTMLElement) {
-					if e.Attr("title") == "decrypted "+hashType+" hash" {
-						response = string(e.Text)
-					}
-				})
+				scrapeWebsite(hashType)
 				c.Visit(hash.url + newhash)
 				return response, nil
 
 			case "sha1":
-				c.OnHTML("span", func(e *colly.HTMLElement) {
-					if e.Attr("title") == "decrypted "+hashType+" hash" {
-						response = string(e.Text)
-					}
-				})
+				scrapeWebsite(hashType)
 				c.Visit(hash.url + newhash)
 				return response, nil
 
 			case "sha256":
-				c.OnHTML("span", func(e *colly.HTMLElement) {
-					if e.Attr("title") == "decrypted "+hashType+" hash" {
-						response = string(e.Text)
-					}
-				})
+				scrapeWebsite(hashType)
 				c.Visit(hash.url + newhash)
 				return response, nil
 			}

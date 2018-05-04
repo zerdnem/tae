@@ -60,7 +60,7 @@ func FromString(s string) (*Hash, error) {
 	case 64:
 		ha = HashAlgorithmSHA256
 	default:
-		return nil, fmt.Errorf("cannot determine algorithm for hash length: %d", len(s))
+		return nil, fmt.Errorf("Cannot determine algorithm for hash length: %d", len(s))
 	}
 
 	return ha.FromString(s)
