@@ -30,14 +30,14 @@ func dcipher(h string) (string, error) {
 	var response string
 	hash, err := utils.FromString(h)
 	if err != nil {
-		return nil, err
+		return response, err
 	}
 	hashType := string(hash.Algorithm)
 	hashValue := fmt.Sprintf("%x", hash.HashValue)
 
 	response, err = dcipherHash(hashValue, hashType)
 	if err != nil {
-		return nil, err
+		return response, err
 	}
 	return response, nil
 }
