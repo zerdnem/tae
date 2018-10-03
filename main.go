@@ -42,13 +42,13 @@ func dcipher(h string) (string, error) {
 	return response, nil
 }
 
-func displaySymbol(hash interface{}) {
+func displaySymbol(hash interface{}) string {
 	s, _ := hash.(string)
 	result, err := dcipher(s)
 	if err != nil {
-		fmt.Printf("%s %s", errorSymbol, err)
+		return fmt.Sprintf("%s %s", errorSymbol, err)
 	}
-	fmt.Printf("%s %s", successSymbol, result)
+	return fmt.Sprintf("%s %s", successSymbol, result)
 }
 
 func main() {
@@ -57,7 +57,8 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			hash := scanner.Text()
-			displaySymbol(hash)
+            symbol := displaySymbol(hash)
+            fmt.Println(symbol)
 		}
 	} else {
 		hash := flag.String("hash", "", "Specify a hash to decipher (Required)")
@@ -66,6 +67,7 @@ func main() {
 			flag.PrintDefaults()
 			os.Exit(1)
 		}
-		displaySymbol(*hash)
+        symbol := displaySymbol(*hash)
+        fmt.Println(symbol)
 	}
 }
