@@ -1,60 +1,43 @@
 package utils
 
 import (
-	"errors"
 	"github.com/gocolly/colly"
 )
 
-var response string
-
 var c = colly.NewCollector()
 
-type hashInfo struct {
-	hashtype string
-	url      string
+type info struct {
+	hashtype, url string
 }
 
-type hash struct {
-	hash []hashInfo
+type api struct {
+	hash []info
 }
 
-func (ha *hash) AddHash() []hashInfo {
-	ha.hash = append(ha.hash, hashInfo{hashtype: "md5", url: "https://hashtoolkit.com/decrypt-md5-hash/?hash="})
-	ha.hash = append(ha.hash, hashInfo{hashtype: "sha1", url: "https://hashtoolkit.com/decrypt-sha1-hash/?hash="})
-	ha.hash = append(ha.hash, hashInfo{hashtype: "sha256", url: "https://hashtoolkit.com/decrypt-sha256-hash/?hash="})
+func (ha *api) addSource() []info {
+	ha.hash = []info{
+		{hashtype: "md5", url: "https://hashtoolkit.com/decrypt-md5-hash/?hash="},
+		{hashtype: "sha1", url: "https://hashtoolkit.com/decrypt-sha1-hash/?hash="},
+		{hashtype: "sha256", url: "https://hashtoolkit.com/decrypt-sha256-hash/?hash="},
+	}
 	return ha.hash
 }
 
-func scrapeWebsite(hashtype string) {
-	c.OnHTML("span", func(e *colly.HTMLElement) {
-		if e.Attr("title") == "decrypted "+hashtype+" hash" {
-			response = string(e.Text)
-		}
-	})
-}
+func RetrieveHash(newhash, hashtype string) string {
+	h := api{}
+	sources := h.addSource()
+	for _, source := range sources {
+		if source.hashtype == hashtype {
+			var response string
+			c.OnHTML("span", func(e *colly.HTMLElement) {
+				if e.Attr("title") == "decrypted "+hashtype+" hash" {
+					response = string(e.Text)
+				}
+			})
+			c.Visit(source.url + newhash)
+			return response
 
-func RetrieveHash(newhash, hashType string) (string, error) {
-	h := hash{}
-	hashes := h.AddHash()
-	for _, hash := range hashes {
-		if hash.hashtype == hashType {
-			switch hash.hashtype {
-			case "md5":
-				scrapeWebsite(hashType)
-				c.Visit(hash.url + newhash)
-				return response, nil
-
-			case "sha1":
-				scrapeWebsite(hashType)
-				c.Visit(hash.url + newhash)
-				return response, nil
-
-			case "sha256":
-				scrapeWebsite(hashType)
-				c.Visit(hash.url + newhash)
-				return response, nil
-			}
 		}
 	}
-	return response, errors.New("Hash could not be deciphered")
+	return ""
 }
