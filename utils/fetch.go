@@ -19,6 +19,8 @@ func (ha *api) addSource() []info {
 		{hashtype: "md5", url: "https://hashtoolkit.com/decrypt-md5-hash/?hash="},
 		{hashtype: "sha1", url: "https://hashtoolkit.com/decrypt-sha1-hash/?hash="},
 		{hashtype: "sha256", url: "https://hashtoolkit.com/decrypt-sha256-hash/?hash="},
+		{hashtype: "sha384", url: "https://hashtoolkit.com/decrypt-sha384-hash/?hash="},
+		{hashtype: "sha512", url: "https://hashtoolkit.com/decrypt-sha512-hash/?hash="},
 	}
 	return ha.hash
 }
