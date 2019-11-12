@@ -25,7 +25,7 @@ func (ha *api) addSource() []info {
 	return ha.hash
 }
 
-func RetrieveHash(newhash, hashtype string) string {
+func DecryptHash(newhash, hashtype string) string {
 	h := api{}
 	sources := h.addSource()
 	for _, source := range sources {

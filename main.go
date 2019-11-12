@@ -17,17 +17,17 @@ var (
 	errorSymbol   = red("✖")
 )
 
-func dcipher(h string) string {
+func decrypt(h string) string {
 	hashtype := utils.HashType(h)
 	if hashtype == "" {
 		return fmt.Sprintf("%s %s", errorSymbol, "Hash not supported")
 	}
 
-	result := utils.RetrieveHash(h, hashtype)
-	if result == "" {
+	decrypted := utils.DecryptHash(h, hashtype)
+	if decrypted == "" {
 		return fmt.Sprintf("%s %s", errorSymbol, "Hash not found")
 	}
-	return fmt.Sprintf("%s decrypted=%s hashtype=%s", successSymbol, result, hashtype)
+	return fmt.Sprintf("%s decrypted=%s hashtype=%s", successSymbol, decrypted, hashtype)
 }
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			hash := scanner.Text()
-			symbol := dcipher(hash)
+			symbol := decrypt(hash)
 			fmt.Println(symbol)
 		}
 	} else {
@@ -46,7 +46,7 @@ func main() {
 			flag.PrintDefaults()
 			os.Exit(1)
 		}
-		symbol := dcipher(*hash)
+		symbol := decrypt(*hash)
 		fmt.Println(symbol)
 	}
 }
