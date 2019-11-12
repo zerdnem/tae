@@ -18,18 +18,16 @@ var (
 )
 
 func dcipher(h string) string {
-	hash, err := utils.FromString(h)
-	if err != nil {
-		return fmt.Sprintf("%s %s", errorSymbol, "Only md5, sha1, sha256 are supprted")
+	hashtype := utils.HashType(h)
+	if hashtype == "" {
+		return fmt.Sprintf("%s %s", errorSymbol, "Hash not supported")
 	}
-	hashType := string(hash.Algorithm)
-	hashValue := fmt.Sprintf("%x", hash.HashValue)
 
-	result := utils.RetrieveHash(hashValue, hashType)
+	result := utils.RetrieveHash(h, hashtype)
 	if result == "" {
 		return fmt.Sprintf("%s %s", errorSymbol, "Hash not found")
 	}
-	return fmt.Sprintf("%s %s", successSymbol, result)
+	return fmt.Sprintf("%s decrypted=%s hashtype=%s", successSymbol, result, hashtype)
 }
 
 func main() {
