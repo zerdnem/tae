@@ -10,6 +10,10 @@ import (
 	"github.com/fatih/color"
 )
 
+type hashes struct {
+	*utils.Hashes
+}
+
 var (
 	green         = color.New(color.FgGreen).SprintFunc()
 	red           = color.New(color.FgRed).SprintFunc()
@@ -30,6 +34,18 @@ func dcipher(h string) string {
 	return fmt.Sprintf("%s decrypted=%s hashtype=%s", successSymbol, result, hashtype)
 }
 
+func printHashes(text string, ha *hashes) {
+	hashes := utils.GenerateHash(text)
+	ha.Hashes = &hashes
+	fmt.Print(
+		"md5    "+ha.Md5+"\n",
+		"sha1   "+ha.Sha1+"\n",
+		"sha256 "+ha.Sha256+"\n",
+		"sha384 "+ha.Sha384+"\n",
+		"sha512 "+ha.Sha512+"\n",
+	)
+}
+
 func main() {
 	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
@@ -41,12 +57,15 @@ func main() {
 		}
 	} else {
 		hash := flag.String("hash", "", "Specify a hash to decipher (Required)")
+		text := flag.String("generate", "", "Generate hash from string")
+		var ha hashes
 		flag.Parse()
-		if *hash == "" {
-			flag.PrintDefaults()
-			os.Exit(1)
+		if *hash != "" {
+			symbol := dcipher(*hash)
+			fmt.Println(symbol)
 		}
-		symbol := dcipher(*hash)
-		fmt.Println(symbol)
+		if *text != "" {
+			printHashes(*text, &ha)
+		}
 	}
 }
