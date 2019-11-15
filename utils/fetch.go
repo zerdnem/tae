@@ -53,7 +53,6 @@ func scrape(element, attr, value, url string) interface{} {
 	return result[0]
 }
 
-func RetrieveHash(newhash, hashtype string) string {
 func DecryptHash(newhash, hashtype string) string {
 	h := api{}
 	sources := h.addSource()
@@ -63,7 +62,6 @@ func DecryptHash(newhash, hashtype string) string {
 			if decrypted, ok := data.(string); ok {
 				return decrypted
 			}
-
 		}
 	}
 	return ""

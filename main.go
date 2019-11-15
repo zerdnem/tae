@@ -61,13 +61,11 @@ func main() {
 		var ha hashes
 		flag.Parse()
 		if *hash != "" {
-			symbol := dcipher(*hash)
+			symbol := decrypt(*hash)
 			fmt.Println(symbol)
 		}
 		if *text != "" {
 			printHashes(*text, &ha)
 		}
-		symbol := decrypt(*hash)
-		fmt.Println(symbol)
 	}
 }
