@@ -67,10 +67,7 @@ func main() {
 		if *text != "" {
 			printHashes(*text, &ha)
 		}
-<<<<<<< HEAD
-=======
 		symbol := decrypt(*hash)
 		fmt.Println(symbol)
->>>>>>> d1589f94fd8a2d2c93a51bacb80608dabf2a117a
 	}
 }

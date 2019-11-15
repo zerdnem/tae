@@ -29,7 +29,6 @@ func (ha *api) addSource() []info {
 	return ha.hash
 }
 
-<<<<<<< HEAD
 func scrape(element, attr, value, url string) interface{} {
 	var result []string
 	c.OnHTML(element, func(e *colly.HTMLElement) {
@@ -55,9 +54,7 @@ func scrape(element, attr, value, url string) interface{} {
 }
 
 func RetrieveHash(newhash, hashtype string) string {
-=======
 func DecryptHash(newhash, hashtype string) string {
->>>>>>> d1589f94fd8a2d2c93a51bacb80608dabf2a117a
 	h := api{}
 	sources := h.addSource()
 	for _, source := range sources {
