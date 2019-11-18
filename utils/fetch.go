@@ -41,6 +41,9 @@ func scrape(element, attr, value, url string) interface{} {
 		}
 	})
 	c.Visit(url)
+	if len(result) == 0 {
+		return "Not found"
+	}
 	if len(result) >= 2 {
 		return Hashes{
 			Md5:    result[0],
@@ -60,6 +63,9 @@ func DecryptHash(newhash, hashtype string) string {
 		if source.hashtype == hashtype {
 			data := scrape("span", "title", "decrypted "+hashtype+" hash", source.url+newhash)
 			if decrypted, ok := data.(string); ok {
+				if decrypted == "Not found" {
+					return ""
+				}
 				return decrypted
 			}
 		}
