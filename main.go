@@ -38,11 +38,11 @@ func printHashes(text string, ha *hashes) {
 	hashes := utils.GenerateHash(text)
 	ha.Hashes = &hashes
 	fmt.Print(
-		"md5    "+ha.Md5+"\n",
-		"sha1   "+ha.Sha1+"\n",
-		"sha256 "+ha.Sha256+"\n",
-		"sha384 "+ha.Sha384+"\n",
-		"sha512 "+ha.Sha512+"\n",
+		green("md5    ")+ha.Md5+"\n",
+		green("sha1   ")+ha.Sha1+"\n",
+		green("sha256 ")+ha.Sha256+"\n",
+		green("sha384 ")+ha.Sha384+"\n",
+		green("sha512 ")+ha.Sha512+"\n",
 	)
 }
 
